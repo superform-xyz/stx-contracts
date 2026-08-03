@@ -53,3 +53,6 @@ script/deploy/deploy-logs/precalc/*.log
 
 # Debug scripts
 script/debug
+# bash-deploy logs (superform)
+script/bash-deploy/logs/*
+!script/bash-deploy/logs/.gitkeep

@@ -18,11 +18,25 @@
   cache_path  = "cache_forge"
   libs = ["node_modules", "lib"]
   gas_reports_ignore = ["MockToken"]
-  fs_permissions = [{ access = "read", path = "script/deploy/artifacts"}, { access = "read", path = "script/deploy"}]
+  fs_permissions = [
+    { access = "read", path = "script/deploy/artifacts"},
+    { access = "read", path = "script/deploy"},
+    { access = "read", path = "script/bash-deploy/artifacts"},
+    { access = "write", path = "script/bash-deploy/deployment"}
+  ]
 
 [profile.ci]
   fuzz = { runs = 1_000 }
   verbosity = 3
+
+# Used by script/bash-deploy/deploy-nexus.sh: restricts the compile scope to the
+# deploy script only, so `forge script --broadcast` never finds a locally-built
+# Nexus artifact whose bytecode differs from the canonical precompiled artifacts
+# (a mismatch makes forge abort the broadcast while decoding constructor args).
+[profile.deploy]
+  src = "script/foundry"
+  test = "script/foundry"
+  script = "script/foundry"
 
 [profile.via-ir]
   via-ir = true
