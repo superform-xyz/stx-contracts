@@ -116,7 +116,7 @@ get_rpc_url() {
             op read op://5ylebqljbh3x6zomdxi3qd7tsa/MAIN_OPTIMISM_VNET/credential
             ;;
         "main-base")
-            op read op://5ylebqljbh3x6zomdxi3qd7tsa/MAIN_BASE_VNET/credential
+            op read op://5ylebqljbh3x6zomdxi3qd7tsa/BASE_MAINNET_VNET/credential
             ;;
         # Demo environment chains
         "demo-ethereum")
