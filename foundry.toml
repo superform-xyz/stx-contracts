@@ -22,7 +22,9 @@
     { access = "read", path = "script/deploy/artifacts"},
     { access = "read", path = "script/deploy"},
     { access = "read", path = "script/bash-deploy/artifacts"},
-    { access = "write", path = "script/bash-deploy/deployment"}
+    { access = "write", path = "script/bash-deploy/deployment"},
+    { access = "read", path = "script/bash-deploy/deployment"},
+    { access = "read", path = "../v2-core/script/output"}
   ]
 
 [profile.ci]
