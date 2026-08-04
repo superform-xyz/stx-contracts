@@ -111,6 +111,14 @@ contract DeployAccountResolver is Script {
             destinationValidator: destinationValidator,
             executors: executors
         });
+
+        // Guard: if the v2.2.3 factory equals the v1.3 factory, v2.2.3 has NOT been deployed on this chain
+        // (the Nexus JSON still holds the older v1.3 addresses). Wiring it would give two identical versions.
+        require(
+            versions[1].factory != versions[0].factory,
+            "v2.2.3 not deployed on this chain: NexusAccountFactory == v1.3 factory (update the Nexus deployment first)"
+        );
+        require(versions[1].factory.code.length != 0, "v2.2.3 NexusAccountFactory has no code on this chain");
     }
 
     /// @dev Maps the bash-deploy environment to the v2-core output directory name.
