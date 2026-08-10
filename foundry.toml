@@ -93,6 +93,14 @@
   arbitrum-one = { key = "${ETHERSCAN_API_KEY}", url = "https://api.etherscan.io/api", chain = "42161"}
   arbitrum-sepolia = { key = "${ETHERSCAN_API_KEY}", url = "https://api.etherscan.io/api", chain = "421614"}
 
+  # ROBINHOOD CHAIN (Arbitrum Orbit L2 — Blockscout explorer, not Etherscan)
+  # DO NOT add an [etherscan] entry for chain 4663: Foundry resolves the `chain` field against its
+  # built-in registry at startup, and 4663 is not a recognized named chain, so `forge script` aborts
+  # with "Chain 4663 not supported" — even for non-verify runs. Verify separately instead:
+  #   forge verify-contract <addr> <contract> --verifier blockscout \
+  #     --verifier-url https://robinhoodchain.blockscout.com/api/ --chain 4663
+  # rh = { key = "", url = "https://robinhoodchain.blockscout.com/api/", chain = "4663"}
+
   # OPTIMISM
   optimism = { key = "${ETHERSCAN_API_KEY}", url = "https://api.etherscan.io/api", chain = "10"}
   optimism-sepolia = { key = "${ETHERSCAN_API_KEY}", url = "https://api.etherscan.io/api", chain = "11155420"}

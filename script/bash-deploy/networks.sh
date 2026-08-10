@@ -29,6 +29,7 @@ declare -A CHAIN_NAMES=(
     ["999"]="HyperEVM"
     ["14"]="Flare"
     ["988"]="Stable"
+    ["4663"]="RH"
 )
 
 # Get chain name from chain ID
@@ -199,9 +200,12 @@ get_rpc_url() {
         "prod-stable")
             op read op://5ylebqljbh3x6zomdxi3qd7tsa/STABLE_RPC_URL/credential
             ;;
+        "prod-rh")
+            op read op://5ylebqljbh3x6zomdxi3qd7tsa/RH_RPC_URL/credential
+            ;;
         *)
             echo "ERROR: Unsupported chain: $chain_name" >&2
-            echo "Supported chains: main-ethereum, main-op, main-base, demo-ethereum, demo-op, demo-base, staging-bnb, staging-ethereum, staging-arbitrum, staging-avalanche, staging-base, staging-hyperevm, staging-flare, staging-stable, prod-ethereum, prod-optimism, prod-base, prod-polygon, prod-arbitrum, prod-avalanche, prod-bnb, prod-unichain, prod-berachain, prod-sonic, prod-gnosis, prod-worldchain, prod-hyperliquid, prod-flare, prod-stable" >&2
+            echo "Supported chains: main-ethereum, main-op, main-base, demo-ethereum, demo-op, demo-base, staging-bnb, staging-ethereum, staging-arbitrum, staging-avalanche, staging-base, staging-hyperevm, staging-flare, staging-stable, prod-ethereum, prod-optimism, prod-base, prod-polygon, prod-arbitrum, prod-avalanche, prod-bnb, prod-unichain, prod-berachain, prod-sonic, prod-gnosis, prod-worldchain, prod-hyperliquid, prod-flare, prod-stable, prod-rh" >&2
             return 1
             ;;
     esac
@@ -222,7 +226,7 @@ get_preset_chains() {
             echo "staging-bnb staging-ethereum staging-arbitrum staging-avalanche staging-base staging-hyperevm staging-flare staging-stable"
             ;;
         "production")
-            echo "prod-ethereum prod-optimism prod-base prod-polygon prod-arbitrum prod-avalanche prod-bnb prod-unichain prod-berachain prod-sonic prod-gnosis prod-worldchain prod-hyperliquid prod-flare prod-stable"
+            echo "prod-ethereum prod-optimism prod-base prod-polygon prod-arbitrum prod-avalanche prod-bnb prod-unichain prod-berachain prod-sonic prod-gnosis prod-worldchain prod-hyperliquid prod-flare prod-stable prod-rh"
             ;;
         *)
             echo "ERROR: Unknown preset: $preset" >&2
@@ -311,6 +315,6 @@ print_network_summary() {
     echo "  main       -> main-ethereum main-op main-base"
     echo "  demo       -> demo-ethereum demo-op demo-base"  
     echo "  staging    -> staging-bnb staging-ethereum staging-arbitrum staging-avalanche staging-base staging-hyperevm staging-flare staging-stable"
-    echo "  production -> prod-ethereum prod-optimism prod-base prod-polygon prod-arbitrum prod-avalanche prod-bnb prod-unichain prod-berachain prod-sonic prod-gnosis prod-worldchain prod-hyperliquid prod-flare prod-stable"
+    echo "  production -> prod-ethereum prod-optimism prod-base prod-polygon prod-arbitrum prod-avalanche prod-bnb prod-unichain prod-berachain prod-sonic prod-gnosis prod-worldchain prod-hyperliquid prod-flare prod-stable prod-rh"
     echo "=========================="
 }
