@@ -100,10 +100,16 @@ compute_environment
 }
 
 ### COPY ARTIFACTS ###
-# NOTE: the precompiled artifacts are the canonical v2.2.3 release bytecode.
-# The branch sources have drifted since they were generated (Nexus 1.3.3 vs 1.3.2),
-# so rebuilding produces DIFFERENT bytecode and DIFFERENT deterministic addresses.
-read -r -p "Do you want to rebuild Nexus artifacts from your local sources? (NOT recommended - changes addresses) (y/n): " proceed
+# NOTE: the precompiled artifacts are the canonical v2.2.3 release bytecode (Nexus 1.3.3,
+# with the single-initialization fix from bcnmy/stx-contracts#24). Rebuilding from the
+# current branch sources produces byte-identical output, so either answer is safe.
+# Batch mode: BATCH_REBUILD (y/n) answers this prompt for all chains.
+if [ -n "$BATCH_REBUILD" ]; then
+    proceed=$BATCH_REBUILD
+    printf "Batch mode: rebuild artifacts = %s\n" "$proceed"
+else
+    read -r -p "Do you want to rebuild Nexus artifacts from your local sources? (y/n): " proceed
+fi
 if [ $proceed = "y" ]; then
     ### BUILD ARTIFACTS ###
     printf "Building Nexus artifacts\n"
@@ -140,19 +146,37 @@ fi
 ### DEPLOY NEXUS SCs ###
 printf "Addresses for Nexus SCs (validator: $DEFAULT_VALIDATOR, environment: $ENVIRONMENT_NAME):\n"
 FOUNDRY_PROFILE=deploy forge script DeployNexus true $DEFAULT_VALIDATOR --sig "run(bool,address)" --rpc-url $CHAIN_RPC_URL -vv | grep -e "Addr" -e "already deployed"
-printf "Do you want to proceed with the addresses above? (y/n): "
-read -r proceed
-if [ $proceed = "y" ]; then
-    printf "Do you want to specify gas price? (y/n): "
+# Batch mode: BATCH_PROCEED (y/n) answers the address confirmation for all chains.
+if [ -n "$BATCH_PROCEED" ]; then
+    proceed=$BATCH_PROCEED
+    printf "Batch mode: proceed with addresses = %s\n" "$proceed"
+else
+    printf "Do you want to proceed with the addresses above? (y/n): "
     read -r proceed
-    if [ $proceed = "y" ]; then
-        printf "Enter gas prices args: \n For the EIP-1559 chains, enter two args: base fee and priority fee in gwei\n For the legacy chains, enter one argument. \n Example eip-1559: 20 1 \n Example legacy: 20 \n"
-        read -r -a GAS_ARGS
-        if [ ${#GAS_ARGS[@]} -eq 2 ]; then
-            GAS_SUFFIX="--with-gas-price ${GAS_ARGS[0]}gwei --priority-gas-price ${GAS_ARGS[1]}gwei"
+fi
+if [ $proceed = "y" ]; then
+    # Batch mode: BATCH_GAS = "n" for default gas, or gas args (e.g. "20 1" eip-1559, "20" legacy).
+    if [ -n "$BATCH_GAS" ]; then
+        if [ "$BATCH_GAS" = "n" ]; then
+            GAS_ARGS=()
         else
-            GAS_SUFFIX="--legacy --with-gas-price ${GAS_ARGS[0]}gwei"
+            read -r -a GAS_ARGS <<< "$BATCH_GAS"
         fi
+        printf "Batch mode: gas = %s\n" "${BATCH_GAS}"
+    else
+        printf "Do you want to specify gas price? (y/n): "
+        read -r proceed
+        if [ $proceed = "y" ]; then
+            printf "Enter gas prices args: \n For the EIP-1559 chains, enter two args: base fee and priority fee in gwei\n For the legacy chains, enter one argument. \n Example eip-1559: 20 1 \n Example legacy: 20 \n"
+            read -r -a GAS_ARGS
+        else
+            GAS_ARGS=()
+        fi
+    fi
+    if [ ${#GAS_ARGS[@]} -eq 2 ]; then
+        GAS_SUFFIX="--with-gas-price ${GAS_ARGS[0]}gwei --priority-gas-price ${GAS_ARGS[1]}gwei"
+    elif [ ${#GAS_ARGS[@]} -eq 1 ]; then
+        GAS_SUFFIX="--legacy --with-gas-price ${GAS_ARGS[0]}gwei"
     else
         GAS_SUFFIX=""
     fi

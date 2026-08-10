@@ -55,6 +55,19 @@ fi
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
+# Ask the per-chain questions once and apply the answers to every chain.
+printf "Rebuild Nexus artifacts from local sources? Applies to all chains (y/n): "
+read -r BATCH_REBUILD
+printf "Auto-confirm the computed addresses on every chain? (y = don't ask again, n = ask per chain): "
+read -r CONFIRM_ONCE
+if [ "$CONFIRM_ONCE" = "y" ]; then
+    BATCH_PROCEED="y"
+    export BATCH_PROCEED
+fi
+printf "Gas price for all chains — 'n' for defaults, or args ('20 1' eip-1559, '20' legacy): "
+read -r BATCH_GAS
+export BATCH_REBUILD BATCH_GAS
+
 for CHAIN in "${CHAINS[@]}"; do
     printf "\n===============================================\n"
     printf "Deploying to %s (%s)\n" "$CHAIN" "$ENVIRONMENT"

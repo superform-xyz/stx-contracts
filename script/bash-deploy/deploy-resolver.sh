@@ -55,23 +55,39 @@ PREVIEW_OUTPUT=$(FOUNDRY_PROFILE=deploy forge script DeployAccountResolver "$ENV
 }
 echo "$PREVIEW_OUTPUT" | grep -e "version:" -e "factory" -e "bootstrap" -e "Validator" -e "executor"
 
-printf "Do you want to proceed with the addresses above? (y/n): "
-read -r proceed
+# Batch mode: BATCH_PROCEED (y/n) answers the confirmation for all chains.
+if [ -n "$BATCH_PROCEED" ]; then
+    proceed=$BATCH_PROCEED
+    printf "Batch mode: proceed with addresses = %s\n" "$proceed"
+else
+    printf "Do you want to proceed with the addresses above? (y/n): "
+    read -r proceed
+fi
 if [ "$proceed" != "y" ]; then
     printf "Exiting\n"; exit 0
 fi
 
-printf "Do you want to specify gas price? (y/n): "
-read -r gas
-GAS_SUFFIX=""
-if [ "$gas" = "y" ]; then
-    printf "EIP-1559: '<baseFee> <priorityFee>' gwei | legacy: '<gasPrice>' gwei\n"
-    read -r -a GAS_ARGS
-    if [ ${#GAS_ARGS[@]} -eq 2 ]; then
-        GAS_SUFFIX="--with-gas-price ${GAS_ARGS[0]}gwei --priority-gas-price ${GAS_ARGS[1]}gwei"
-    else
-        GAS_SUFFIX="--legacy --with-gas-price ${GAS_ARGS[0]}gwei"
+# Batch mode: BATCH_GAS = "n" for default gas, or gas args (e.g. "20 1" eip-1559, "20" legacy).
+GAS_ARGS=()
+if [ -n "$BATCH_GAS" ]; then
+    if [ "$BATCH_GAS" != "n" ]; then
+        read -r -a GAS_ARGS <<< "$BATCH_GAS"
     fi
+    printf "Batch mode: gas = %s\n" "$BATCH_GAS"
+else
+    printf "Do you want to specify gas price? (y/n): "
+    read -r gas
+    if [ "$gas" = "y" ]; then
+        printf "EIP-1559: '<baseFee> <priorityFee>' gwei | legacy: '<gasPrice>' gwei\n"
+        read -r -a GAS_ARGS
+    fi
+fi
+if [ ${#GAS_ARGS[@]} -eq 2 ]; then
+    GAS_SUFFIX="--with-gas-price ${GAS_ARGS[0]}gwei --priority-gas-price ${GAS_ARGS[1]}gwei"
+elif [ ${#GAS_ARGS[@]} -eq 1 ]; then
+    GAS_SUFFIX="--legacy --with-gas-price ${GAS_ARGS[0]}gwei"
+else
+    GAS_SUFFIX=""
 fi
 
 ### DEPLOY ###
