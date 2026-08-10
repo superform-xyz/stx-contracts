@@ -3,7 +3,7 @@
 ### VERIFY INPUTS ###
 printMan() {
     printf "Usage: $0 <Environment: local|mainnet|testnet> <Network Name>\n"
-    printf "Supported networks: prod-ethereum, prod-optimism, prod-base, prod-polygon, prod-arbitrum, prod-avalanche, prod-bnb, prod-unichain, prod-berachain, prod-sonic, prod-gnosis, prod-worldchain, prod-flare, prod-stable, staging-base, staging-ethereum, staging-arbitrum, staging-avalanche, staging-bnb, staging-hyperevm, staging-flare, staging-stable\n"
+    printf "Supported networks: prod-ethereum, prod-optimism, prod-base, prod-polygon, prod-arbitrum, prod-avalanche, prod-bnb, prod-unichain, prod-berachain, prod-sonic, prod-gnosis, prod-worldchain, prod-hyperliquid, prod-flare, prod-stable, prod-rh, staging-base, staging-ethereum, staging-arbitrum, staging-avalanche, staging-bnb, staging-hyperevm, staging-flare, staging-stable\n"
     printf "Prereq: the Nexus deployment (deploy-nexus.sh) AND the v2-core periphery for this environment must already exist.\n"
 }
 
@@ -48,8 +48,12 @@ ENVIRONMENT_NAME=$(get_environment_from_chain_name "$CHAIN_NAME") || exit 1
 
 ### PREVIEW CONFIG ###
 printf "Previewing AccountResolver config (environment: $ENVIRONMENT_NAME):\n"
-FOUNDRY_PROFILE=deploy forge script DeployAccountResolver "$ENVIRONMENT_NAME" \
-    --sig "run(string)" --rpc-url "$CHAIN_RPC_URL" -vv | grep -e "version:" -e "factory" -e "bootstrap" -e "Validator" -e "executor"
+PREVIEW_OUTPUT=$(FOUNDRY_PROFILE=deploy forge script DeployAccountResolver "$ENVIRONMENT_NAME" \
+    --sig "run(string)" --rpc-url "$CHAIN_RPC_URL" -vv 2>&1) || {
+    printf "Preview failed for %s — not deploying.\n%s\n" "$CHAIN_NAME" "$(echo "$PREVIEW_OUTPUT" | tail -5)"
+    exit 1
+}
+echo "$PREVIEW_OUTPUT" | grep -e "version:" -e "factory" -e "bootstrap" -e "Validator" -e "executor"
 
 printf "Do you want to proceed with the addresses above? (y/n): "
 read -r proceed
