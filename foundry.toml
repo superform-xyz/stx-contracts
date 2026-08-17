@@ -18,11 +18,27 @@
   cache_path  = "cache_forge"
   libs = ["node_modules", "lib"]
   gas_reports_ignore = ["MockToken"]
-  fs_permissions = [{ access = "read", path = "script/deploy/artifacts"}, { access = "read", path = "script/deploy"}]
+  fs_permissions = [
+    { access = "read", path = "script/deploy/artifacts"},
+    { access = "read", path = "script/deploy"},
+    { access = "read", path = "script/bash-deploy/artifacts"},
+    { access = "write", path = "script/bash-deploy/deployment"},
+    { access = "read", path = "script/bash-deploy/deployment"},
+    { access = "read", path = "../v2-core/script/output"}
+  ]
 
 [profile.ci]
   fuzz = { runs = 1_000 }
   verbosity = 3
+
+# Used by script/bash-deploy/deploy-nexus.sh: restricts the compile scope to the
+# deploy script only, so `forge script --broadcast` never finds a locally-built
+# Nexus artifact whose bytecode differs from the canonical precompiled artifacts
+# (a mismatch makes forge abort the broadcast while decoding constructor args).
+[profile.deploy]
+  src = "script/foundry"
+  test = "script/foundry"
+  script = "script/foundry"
 
 [profile.via-ir]
   via-ir = true
@@ -76,6 +92,14 @@
   # ARBITRUM
   arbitrum-one = { key = "${ETHERSCAN_API_KEY}", url = "https://api.etherscan.io/api", chain = "42161"}
   arbitrum-sepolia = { key = "${ETHERSCAN_API_KEY}", url = "https://api.etherscan.io/api", chain = "421614"}
+
+  # ROBINHOOD CHAIN (Arbitrum Orbit L2 — Blockscout explorer, not Etherscan)
+  # DO NOT add an [etherscan] entry for chain 4663: Foundry resolves the `chain` field against its
+  # built-in registry at startup, and 4663 is not a recognized named chain, so `forge script` aborts
+  # with "Chain 4663 not supported" — even for non-verify runs. Verify separately instead:
+  #   forge verify-contract <addr> <contract> --verifier blockscout \
+  #     --verifier-url https://robinhoodchain.blockscout.com/api/ --chain 4663
+  # rh = { key = "", url = "https://robinhoodchain.blockscout.com/api/", chain = "4663"}
 
   # OPTIMISM
   optimism = { key = "${ETHERSCAN_API_KEY}", url = "https://api.etherscan.io/api", chain = "10"}
