@@ -200,6 +200,9 @@ get_rpc_url() {
         "prod-stable")
             op read op://5ylebqljbh3x6zomdxi3qd7tsa/STABLE_RPC_URL/credential
             ;;
+        "staging-rh")
+            op read op://5ylebqljbh3x6zomdxi3qd7tsa/RH_RPC_URL/credential
+            ;;
         "prod-rh")
             op read op://5ylebqljbh3x6zomdxi3qd7tsa/RH_RPC_URL/credential
             ;;
