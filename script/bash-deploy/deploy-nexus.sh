@@ -188,9 +188,9 @@ if [ $proceed = "y" ]; then
         SHOULD_VERIFY=false
 
         if [ "$SHOULD_VERIFY" = true ]; then
-            FOUNDRY_PROFILE=deploy forge script DeployNexus $ENVIRONMENT_NAME $DEFAULT_VALIDATOR --sig "runDeploy(string,address)" --rpc-url $CHAIN_RPC_URL --etherscan-api-key $CHAIN_NAME --private-key $PRIVATE_KEY $VERIFY -vv --broadcast --slow $GAS_SUFFIX 1> ./logs/$CHAIN_NAME/$CHAIN_NAME-deploy-nexus.log 2> ./logs/$CHAIN_NAME/$CHAIN_NAME-deploy-nexus-errors.log
+            FOUNDRY_PROFILE=deploy forge script DeployNexus $ENVIRONMENT_NAME $DEFAULT_VALIDATOR --sig "runDeploy(string,address)" --rpc-url $CHAIN_RPC_URL --etherscan-api-key $CHAIN_NAME --private-key $PRIVATE_KEY $VERIFY -vv --broadcast --slow $GAS_SUFFIX ${GAS_ESTIMATE_MULTIPLIER:+--gas-estimate-multiplier $GAS_ESTIMATE_MULTIPLIER} 1> ./logs/$CHAIN_NAME/$CHAIN_NAME-deploy-nexus.log 2> ./logs/$CHAIN_NAME/$CHAIN_NAME-deploy-nexus-errors.log
         else
-            FOUNDRY_PROFILE=deploy forge script DeployNexus $ENVIRONMENT_NAME $DEFAULT_VALIDATOR --sig "runDeploy(string,address)" --rpc-url $CHAIN_RPC_URL --private-key $PRIVATE_KEY -vv --broadcast --slow $GAS_SUFFIX 1> ./logs/$CHAIN_NAME/$CHAIN_NAME-deploy-nexus.log 2> ./logs/$CHAIN_NAME/$CHAIN_NAME-deploy-nexus-errors.log
+            FOUNDRY_PROFILE=deploy forge script DeployNexus $ENVIRONMENT_NAME $DEFAULT_VALIDATOR --sig "runDeploy(string,address)" --rpc-url $CHAIN_RPC_URL --private-key $PRIVATE_KEY -vv --broadcast --slow $GAS_SUFFIX ${GAS_ESTIMATE_MULTIPLIER:+--gas-estimate-multiplier $GAS_ESTIMATE_MULTIPLIER} 1> ./logs/$CHAIN_NAME/$CHAIN_NAME-deploy-nexus.log 2> ./logs/$CHAIN_NAME/$CHAIN_NAME-deploy-nexus-errors.log
         fi
     } || {
         printf "Deployment failed\n See logs for more details\n"

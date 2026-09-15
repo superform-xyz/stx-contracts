@@ -50,6 +50,28 @@ chain_id = 11155111
 [11155111.string]
 name = "Eth Sepolia"
 
+### Plataberget — Glamsterdam devnet-class testnet (chain id = 7091047534)
+[7091047534]
+endpoint_url = "${RPC_7091047534}"
+
+[7091047534.bool]
+is_testnet = true
+verify = false
+
+[7091047534.uint]
+chain_id = 7091047534
+# Glamsterdam tooling workarounds (measured on-chain during v2-core deploy):
+# - base_gas_price pins 1 gwei: the flaky devnet RPC feeds cast/forge garbage fee
+#   estimates (observed 10,000 gwei effective price against a 7-wei basefee)
+# - gas_estimate_multiply 1500 (=15x): forge simulates on the pre-fork EVM and
+#   under-gases deployment txs ~5-8x under EIP-8037 state-gas pricing (observed:
+#   1.75M estimate vs 9.4M actual); under EIP-2780 such txs are INCLUDED-but-failed
+base_gas_price = 1
+gas_estimate_multiply = 1500
+
+[7091047534.string]
+name = "Plataberget"
+
 # ===============
 # BASE
 # ===============

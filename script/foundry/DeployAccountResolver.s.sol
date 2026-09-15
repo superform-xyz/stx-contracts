@@ -40,6 +40,7 @@ contract DeployAccountResolver is Script {
         chainNames[14] = "Flare";
         chainNames[988] = "Stable";
         chainNames[4663] = "RH";
+        chainNames[7_091_047_534] = "Plataberget"; // Glamsterdam testnet
     }
 
     /// @notice Preview the version config that would be deployed for `environment` (no broadcast).

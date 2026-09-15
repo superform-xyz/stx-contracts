@@ -30,6 +30,7 @@ declare -A CHAIN_NAMES=(
     ["14"]="Flare"
     ["988"]="Stable"
     ["4663"]="RH"
+    ["7091047534"]="Plataberget"
 )
 
 # Get chain name from chain ID
@@ -199,6 +200,10 @@ get_rpc_url() {
             ;;
         "prod-stable")
             op read op://5ylebqljbh3x6zomdxi3qd7tsa/STABLE_RPC_URL/credential
+            ;;
+        "staging-plataberget")
+            # Glamsterdam devnet-class testnet — public endpoint, no 1Password item
+            echo "https://rpc.plataberget.ethpandaops.io"
             ;;
         "staging-rh")
             op read op://5ylebqljbh3x6zomdxi3qd7tsa/RH_RPC_URL/credential
