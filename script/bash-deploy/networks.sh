@@ -30,6 +30,7 @@ declare -A CHAIN_NAMES=(
     ["14"]="Flare"
     ["988"]="Stable"
     ["4663"]="RH"
+    ["5042"]="Arc"
     ["7091047534"]="Plataberget"
 )
 
@@ -211,9 +212,15 @@ get_rpc_url() {
         "prod-rh")
             op read op://5ylebqljbh3x6zomdxi3qd7tsa/RH_RPC_URL/credential
             ;;
+        "staging-arc")
+            op read op://5ylebqljbh3x6zomdxi3qd7tsa/ARC_RPC_URL/credential
+            ;;
+        "prod-arc")
+            op read op://5ylebqljbh3x6zomdxi3qd7tsa/ARC_RPC_URL/credential
+            ;;
         *)
             echo "ERROR: Unsupported chain: $chain_name" >&2
-            echo "Supported chains: main-ethereum, main-op, main-base, demo-ethereum, demo-op, demo-base, staging-bnb, staging-ethereum, staging-arbitrum, staging-avalanche, staging-base, staging-hyperevm, staging-flare, staging-stable, prod-ethereum, prod-optimism, prod-base, prod-polygon, prod-arbitrum, prod-avalanche, prod-bnb, prod-unichain, prod-berachain, prod-sonic, prod-gnosis, prod-worldchain, prod-hyperliquid, prod-flare, prod-stable, prod-rh" >&2
+            echo "Supported chains: main-ethereum, main-op, main-base, demo-ethereum, demo-op, demo-base, staging-bnb, staging-ethereum, staging-arbitrum, staging-avalanche, staging-base, staging-hyperevm, staging-flare, staging-stable, prod-ethereum, prod-optimism, prod-base, prod-polygon, prod-arbitrum, prod-avalanche, prod-bnb, prod-unichain, prod-berachain, prod-sonic, prod-gnosis, prod-worldchain, prod-hyperliquid, prod-flare, prod-stable, prod-rh, staging-arc, prod-arc" >&2
             return 1
             ;;
     esac

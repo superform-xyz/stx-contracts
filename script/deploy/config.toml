@@ -50,6 +50,22 @@ chain_id = 11155111
 [11155111.string]
 name = "Eth Sepolia"
 
+### Arc — Circle Arc L1 (chain id = 5042, USDC-native gas)
+[5042]
+endpoint_url = "${RPC_5042}"
+
+[5042.bool]
+is_testnet = false
+# Arc is not on Etherscan V2; its explorer (exploreme.pro) verification path is unconfirmed.
+# Leave verification off here — verify separately/manually once the explorer API is confirmed.
+verify = false
+
+[5042.uint]
+chain_id = 5042
+
+[5042.string]
+name = "Arc"
+
 ### Plataberget — Glamsterdam devnet-class testnet (chain id = 7091047534)
 [7091047534]
 endpoint_url = "${RPC_7091047534}"
