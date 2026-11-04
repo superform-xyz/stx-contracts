@@ -42,6 +42,7 @@ contract DeployAccountResolver is Script {
         chainNames[4663] = "RH";
         chainNames[5042] = "Arc"; // Circle Arc L1 (USDC-native gas)
         chainNames[7_091_047_534] = "Plataberget"; // Glamsterdam testnet
+        chainNames[747_474] = "Katana"; // OP Stack L2, ETH gas
     }
 
     /// @notice Preview the version config that would be deployed for `environment` (no broadcast).

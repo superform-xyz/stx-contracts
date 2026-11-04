@@ -32,6 +32,7 @@ declare -A CHAIN_NAMES=(
     ["4663"]="RH"
     ["5042"]="Arc"
     ["7091047534"]="Plataberget"
+    ["747474"]="Katana"
 )
 
 # Get chain name from chain ID
@@ -218,9 +219,22 @@ get_rpc_url() {
         "prod-arc")
             op read op://5ylebqljbh3x6zomdxi3qd7tsa/ARC_RPC_URL/credential
             ;;
+        # TEMPORARY: public endpoint, same pattern as prod-hyperliquid above.
+        # The vault item KATANA_RPC_URL currently holds a provider hostname with no auth
+        # token in the path, so it answers 401 UNAUTHORIZED. Restore the `op read` lines
+        # below once that item carries the full HTTP Provider URL including its token.
+        #
+        # Katana is reachable by name (prod-katana / staging-katana) but is NOT in the
+        # staging/production presets below, matching Arc: --preset deploys skip it.
+        "staging-katana")
+            echo "https://katana.drpc.org"
+            ;;
+        "prod-katana")
+            echo "https://katana.drpc.org"
+            ;;
         *)
             echo "ERROR: Unsupported chain: $chain_name" >&2
-            echo "Supported chains: main-ethereum, main-op, main-base, demo-ethereum, demo-op, demo-base, staging-bnb, staging-ethereum, staging-arbitrum, staging-avalanche, staging-base, staging-hyperevm, staging-flare, staging-stable, prod-ethereum, prod-optimism, prod-base, prod-polygon, prod-arbitrum, prod-avalanche, prod-bnb, prod-unichain, prod-berachain, prod-sonic, prod-gnosis, prod-worldchain, prod-hyperliquid, prod-flare, prod-stable, prod-rh, staging-arc, prod-arc" >&2
+            echo "Supported chains: main-ethereum, main-op, main-base, demo-ethereum, demo-op, demo-base, staging-bnb, staging-ethereum, staging-arbitrum, staging-avalanche, staging-base, staging-hyperevm, staging-flare, staging-stable, prod-ethereum, prod-optimism, prod-base, prod-polygon, prod-arbitrum, prod-avalanche, prod-bnb, prod-unichain, prod-berachain, prod-sonic, prod-gnosis, prod-worldchain, prod-hyperliquid, prod-flare, prod-stable, prod-rh, staging-arc, prod-arc, staging-katana, prod-katana" >&2
             return 1
             ;;
     esac

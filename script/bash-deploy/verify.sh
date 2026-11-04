@@ -26,6 +26,16 @@ if [ -z "$ETHERSCAN_API_KEY_NAME" ]; then
     ETHERSCAN_API_KEY_NAME=$CHAIN_NAME
 fi
 
+# Anchor to this script's own directory, the way deploy-nexus.sh and deploy-resolver.sh
+# do, so ./logs resolves here rather than wherever the caller happened to stand.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+# Every forge call below redirects into this directory, so a verification run for a
+# chain that has never been deployed from here would otherwise fail on the redirect
+# rather than on anything to do with verification.
+mkdir -p "./logs/$CHAIN_NAME"
+
 # verify contracts
 
 # NEXUS

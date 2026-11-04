@@ -3,7 +3,7 @@
 ### VERIFY INPUTS ###
 printMan() {
     printf "Usage: $0 <Environment: local|mainnet|testnet> <Network Name>\n"
-    printf "Supported networks: prod-ethereum, prod-optimism, prod-base, prod-polygon, prod-arbitrum, prod-avalanche, prod-bnb, prod-unichain, prod-berachain, prod-sonic, prod-gnosis, prod-worldchain, prod-hyperliquid, prod-flare, prod-stable, prod-rh, staging-base, staging-ethereum, staging-arbitrum, staging-avalanche, staging-bnb, staging-hyperevm, staging-flare, staging-stable\n"
+    printf "Supported networks: prod-ethereum, prod-optimism, prod-base, prod-polygon, prod-arbitrum, prod-avalanche, prod-bnb, prod-unichain, prod-berachain, prod-sonic, prod-gnosis, prod-worldchain, prod-hyperliquid, prod-flare, prod-stable, prod-rh, prod-katana, staging-base, staging-ethereum, staging-arbitrum, staging-avalanche, staging-bnb, staging-hyperevm, staging-flare, staging-stable, staging-katana\n"
     printf "Prereq: the Nexus deployment (deploy-nexus.sh) AND the v2-core periphery for this environment must already exist.\n"
 }
 

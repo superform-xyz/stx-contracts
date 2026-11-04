@@ -147,7 +147,7 @@
   unichain-sepolia = { key = "${ETHERSCAN_API_KEY}", url = "https://api.etherscan.io/api", chain = "1301"}
 
   # KATANA
-  katana = { key = "${ETHERSCAN_API_KEY}", url = "https://api.etherscan.io/api", chain = "747474"}
+  katana = { key = "${ETHERSCAN_API_KEY}", url = "https://api.etherscan.io/v2/api?chainid=747474", chain = "747474"}
 
   # LISK
   # lisk = { key = "", url = "", chain = "1135"}
